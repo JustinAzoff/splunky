@@ -57,11 +57,11 @@ class Server:
             r[name] = k.text
         return r
 
-    def search_sync(self, q, **kwargs):
+    def search_sync(self, q, check_interval=0.2, **kwargs):
         sid = self.search(q, **kwargs)
         done = False
         while not done:
             s = self.status(sid)
             done = int(s['isDone'])
-            time.sleep(0.2)
+            time.sleep(check_interval)
         return self.results(sid, **kwargs)
