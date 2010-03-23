@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+import splunky
+import getpass
+
+from optparse import OptionParser
+parser = OptionParser()
+
+parser.add_option("-s", "--server",  dest="host", action="store",  help="splunk server",default="localhost")
+parser.add_option("-p", "--port",    dest="port", action="store",  help="port",  default=8089)
+parser.add_option("-u", "--username",dest="username",   action="store",  help="username",  default="admin")
+
+(options, args) = parser.parse_args()
+
+pw = getpass.getpass()
+
+p=splunky.Server(host=options.host, port=options.port, username=options.username, password=pw)
+
+q = ' '.join(args)
+
+for r in p.search_sync(q):
+    print r['_raw']

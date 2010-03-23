@@ -10,11 +10,12 @@ NS_MAP = {
 }
 
 class Server:
-    def __init__(self, host, port=8089):
+    def __init__(self, host, username, password, port=8089):
         self.host = host
         self.port = port
 
         self.h = httplib2.Http()
+        self.h.add_credentials(username, password)
 
     def do(self, method, endpoint, data=None):
         d = data and urllib.urlencode(data) or ''
@@ -46,7 +47,7 @@ class Server:
     def results(self, sid, **kwargs):
         d = {'output_mode': 'json'}
         d.update(kwargs)
-        return self.get_json("search/jobs/%s/results" % sid, d)
+        return self.get_json("search/jobs/%s/events" % sid, d)
 
     def status(self, sid):
         x =  self.get_xml("search/jobs/%s" % sid)
