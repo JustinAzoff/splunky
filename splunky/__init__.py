@@ -1,1 +1,1 @@
-#
+from splunky import Server
