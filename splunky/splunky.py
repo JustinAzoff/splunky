@@ -1,8 +1,11 @@
 import lxml.etree as et
 import httplib2
 import urllib
-import simplejson
 import time
+try :
+    import json
+except ImportError:
+    import simplejson as json
 
 NS_MAP = {
  'atom': 'http://www.w3.org/2005/Atom',
@@ -31,7 +34,7 @@ class Server:
     def get_json(self, endpoint, data):
         d = data and urllib.urlencode(data) or ''
         d = self.do('GET', endpoint + '?' + d)
-        return simplejson.loads(d)
+        return json.loads(d)
 
     def get_xml(self, endpoint, data=None):
         d = data and urllib.urlencode(data) or ''
