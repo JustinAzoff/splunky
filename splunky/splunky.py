@@ -34,6 +34,8 @@ class Server:
     def get_json(self, endpoint, data):
         d = data and urllib.urlencode(data) or ''
         d = self.do('GET', endpoint + '?' + d)
+        if not d:
+            return None
         return json.loads(d)
 
     def get_xml(self, endpoint, data=None):
