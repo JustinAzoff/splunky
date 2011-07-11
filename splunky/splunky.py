@@ -52,7 +52,10 @@ class Server:
     def results(self, sid, **kwargs):
         d = {'output_mode': 'json'}
         d.update(kwargs)
-        return self.get_json("search/jobs/%s/events" % sid, d)
+        results = self.get_json("search/jobs/%s/events" % sid, d)
+        if not results:
+            results = []
+        return results
 
     def status(self, sid):
         x =  self.get_xml("search/jobs/%s" % sid)
