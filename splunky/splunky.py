@@ -2,7 +2,6 @@ import lxml.etree as et
 import httplib2
 import urllib
 import time
-import re
 try :
     import json
 except ImportError:
@@ -74,21 +73,3 @@ class Server:
             done = int(s['isDone'])
             time.sleep(check_interval)
         return self.results(sid, **kwargs)
-
-    def parse_kv(self, event):
-        """Pase the key=value foo=bar bar=baz line format"""
-        raw = event['_raw']
-        time, rest = raw.split(", ", 1)
-        parts = re.findall("([^,]+), ", rest)
-        pairs = [p.split("=", 1) for p in parts]
-        data = {}
-        for k,v in pairs:
-            data[k] = clean_quotes(v)
-        data['time'] = time
-        event.update(data)
-        return event
-
-def clean_quotes(s):
-    if s.startswith('"') and s.endswith('"'):
-        s = s[1:-1]
-    return s
