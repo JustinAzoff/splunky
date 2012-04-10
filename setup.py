@@ -3,7 +3,7 @@ import sys, os
 from glob import glob
 
 
-version = '0.5'
+version = '0.6'
 
 setup(name='splunky',
     version=version,
@@ -20,7 +20,7 @@ setup(name='splunky',
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        "httplib2",
+        "requests",
         "lxml",
     ],
     scripts=glob('scripts/*'),

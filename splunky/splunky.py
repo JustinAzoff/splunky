@@ -1,6 +1,5 @@
 import lxml.etree as et
-import httplib2
-import urllib
+import requests
 import time
 try :
     import json
@@ -17,31 +16,29 @@ class Server:
         self.host = host
         self.port = port
 
-        self.h = httplib2.Http()
-        self.h.add_credentials(username, password)
+        self.s = requests.session(auth=(username,password))
 
-    def do(self, method, endpoint, data=None):
-        d = data and urllib.urlencode(data) or ''
+    def makeurl(self, endpoint):
         url = "https://%s:%s/services/%s" % (self.host, self.port, endpoint)
-        
-        resp, content = self.h.request(url, method, body=d)
-        return content
+        return url
 
     def post_xml(self, endpoint, data):
-        d = self.do('POST', endpoint, data)
-        return et.fromstring(d)
+        url = self.makeurl(endpoint)
+        d = self.s.post(url, data=data)
+        return et.fromstring(d.raw.read())
 
     def get_json(self, endpoint, data):
-        d = data and urllib.urlencode(data) or ''
-        d = self.do('GET', endpoint + '?' + d)
-        if not d:
+        url = self.makeurl(endpoint)
+        d = self.s.get(url, params=data)
+        t = d.raw.read()
+        if not t:
             return None
-        return json.loads(d)
+        return json.loads(t)
 
     def get_xml(self, endpoint, data=None):
-        d = data and urllib.urlencode(data) or ''
-        d = self.do('GET', endpoint + '?' + d)
-        return et.fromstring(d)
+        url = self.makeurl(endpoint)
+        d = self.s.get(url, params=data)
+        return et.fromstring(d.raw.read())
 
     def search(self, q, **kwargs):
         data={'search': 'search ' + q}
