@@ -28,6 +28,7 @@ class Server:
         return et.fromstring(d.raw.read())
 
     def get_json(self, endpoint, data):
+        data['output_mode'] = 'json'
         url = self.makeurl(endpoint)
         d = self.s.get(url, params=data)
         t = d.raw.read()
@@ -47,9 +48,7 @@ class Server:
         return data.findtext("sid")
 
     def results(self, sid, **kwargs):
-        d = {'output_mode': 'json'}
-        d.update(kwargs)
-        results = self.get_json("search/jobs/%s/events" % sid, d)
+        results = self.get_json("search/jobs/%s/events" % sid, kwargs)
         if not results:
             results = []
         return results
