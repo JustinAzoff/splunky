@@ -16,7 +16,7 @@ class Server:
         self.host = host
         self.port = port
 
-        self.s = requests.session(auth=(username,password))
+        self.s = requests.session(auth=(username,password),verify=False)
 
     def makeurl(self, endpoint):
         url = "https://%s:%s/services/%s" % (self.host, self.port, endpoint)
