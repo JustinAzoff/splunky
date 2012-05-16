@@ -25,21 +25,20 @@ class Server:
     def post_xml(self, endpoint, data):
         url = self.makeurl(endpoint)
         d = self.s.post(url, data=data)
-        return et.fromstring(d.raw.read())
+        return et.fromstring(str(d.text))
 
     def get_json(self, endpoint, data):
         data['output_mode'] = 'json'
         url = self.makeurl(endpoint)
         d = self.s.get(url, params=data)
-        t = d.raw.read()
-        if not t:
+        if not d.text:
             return None
-        return json.loads(t)
+        return json.loads(str(d.text))
 
     def get_xml(self, endpoint, data=None):
         url = self.makeurl(endpoint)
         d = self.s.get(url, params=data)
-        return et.fromstring(d.raw.read())
+        return et.fromstring(str(d.text))
 
     def search(self, q, **kwargs):
         data={'search': 'search ' + q}
