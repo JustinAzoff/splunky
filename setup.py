@@ -3,7 +3,7 @@ import sys, os
 from glob import glob
 
 
-version = '0.6'
+version = '0.7'
 
 setup(name='splunky',
     version=version,
